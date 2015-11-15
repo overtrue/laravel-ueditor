@@ -1,0 +1,15 @@
+{
+    "name": "overtrue/laravel-ueditor",
+    "description": "UEditor integration for Laravel.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "overtrue",
+            "email": "anzhengchao@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "fabpot/php-cs-fixer": "^1.10"
+    }
+}

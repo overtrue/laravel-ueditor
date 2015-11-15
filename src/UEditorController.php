@@ -1,0 +1,48 @@
+<?php
+/**
+ * UEditorController.php.
+ *
+ * This file is part of the laravel-ueditor.
+ *
+ * (c) overtrue <i@overtrue.me>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+namespace App\Services\UEditor;
+
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+
+/**
+ * Class UEditorController.
+ */
+class UEditorController extends Controller
+{
+    public function serve(Request $request)
+    {
+        $upload = config('ueditor.upload');
+        $storage = app()->make('ueditor.storage');
+
+        switch ($request->get('action')) {
+            case 'config':
+                return config('ueditor.upload');
+
+            // lists
+            case $upload['imageManagerActionName']:
+                return $storage->listFiles(
+                    $upload['imageManagerListPath'],
+                    $request->get('start'),
+                    $request->get('size'),
+                    $upload['imageManagerAllowFiles']);
+            case $upload['fileManagerActionName']:
+                return $storage->listFiles(
+                    $upload['fileManagerListPath'],
+                    $request->get('start'),
+                    $request->get('size'),
+                    $upload['fileManagerAllowFiles']);
+            default:
+                return $storage->upload($request);
+        }
+    }
+}
