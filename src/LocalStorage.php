@@ -9,7 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace App\Services\UEditor;
+namespace Overtrue\LaravelUEditor;
 
 use Exception;
 use Symfony\Component\Finder\Finder;
@@ -28,7 +28,7 @@ class LocalStorage implements StorageInterface
      *
      * @return mixed
      *
-     * @throws \App\Services\UEditor\StoreErrorException
+     * @throws \Overtrue\LaravelUEditor\StoreErrorException
      */
     public function store(UploadedFile $file, $filename)
     {

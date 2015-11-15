@@ -9,7 +9,7 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace App\Services\UEditor;
+namespace Overtrue\LaravelUEditor;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Manager;
@@ -106,7 +106,7 @@ class StorageManager extends Manager
     /**
      * Make qiniu storage.
      *
-     * @return \App\Services\UEditor\QiNiuStorage
+     * @return \Overtrue\LaravelUEditor\QiNiuStorage
      */
     public function createQiniuDriver()
     {
