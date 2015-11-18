@@ -40,7 +40,7 @@ php artisan vendor:publish
         ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
     });
 </script>
-@stop
+
 
 <!-- 编辑器容器 -->
 <script id="container" name="content" type="text/plain"></script>
