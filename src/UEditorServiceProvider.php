@@ -38,7 +38,7 @@ class UEditorServiceProvider extends ServiceProvider
         ], 'assets');
 
         $this->publishes([
-            __DIR__.'/views' => base_path('resources/views/vendor/ueditor'),
+            __DIR__.'/views'        => base_path('resources/views/vendor/ueditor'),
             __DIR__.'/translations' => base_path('resources/lang/vendor/ueditor'),
         ], 'resources');
 

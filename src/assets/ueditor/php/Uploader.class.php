@@ -20,29 +20,29 @@ class Uploader
     private $fileSize; //文件大小
     private $fileType; //文件类型
     private $stateInfo; //上传状态信息,
-    private $stateMap = array( //上传状态映射表，国际化用户需考虑此处数据的国际化
+    private $stateMap = [ //上传状态映射表，国际化用户需考虑此处数据的国际化
         'SUCCESS', //上传成功标记，在UEditor中内不可改变，否则flash判断会出错
         '文件大小超出 upload_max_filesize 限制',
         '文件大小超出 MAX_FILE_SIZE 限制',
         '文件未被完整上传',
         '没有文件被上传',
         '上传文件为空',
-        'ERROR_TMP_FILE' => '临时文件错误',
+        'ERROR_TMP_FILE'           => '临时文件错误',
         'ERROR_TMP_FILE_NOT_FOUND' => '找不到临时文件',
-        'ERROR_SIZE_EXCEED' => '文件大小超出网站限制',
-        'ERROR_TYPE_NOT_ALLOWED' => '文件类型不允许',
-        'ERROR_CREATE_DIR' => '目录创建失败',
-        'ERROR_DIR_NOT_WRITEABLE' => '目录没有写权限',
-        'ERROR_FILE_MOVE' => '文件保存时出错',
-        'ERROR_FILE_NOT_FOUND' => '找不到上传文件',
-        'ERROR_WRITE_CONTENT' => '写入文件内容错误',
-        'ERROR_UNKNOWN' => '未知错误',
-        'ERROR_DEAD_LINK' => '链接不可用',
-        'ERROR_HTTP_LINK' => '链接不是http链接',
-        'ERROR_HTTP_CONTENTTYPE' => '链接contentType不正确',
-        'INVALID_URL' => '非法 URL',
-        'INVALID_IP' => '非法 IP',
-    );
+        'ERROR_SIZE_EXCEED'        => '文件大小超出网站限制',
+        'ERROR_TYPE_NOT_ALLOWED'   => '文件类型不允许',
+        'ERROR_CREATE_DIR'         => '目录创建失败',
+        'ERROR_DIR_NOT_WRITEABLE'  => '目录没有写权限',
+        'ERROR_FILE_MOVE'          => '文件保存时出错',
+        'ERROR_FILE_NOT_FOUND'     => '找不到上传文件',
+        'ERROR_WRITE_CONTENT'      => '写入文件内容错误',
+        'ERROR_UNKNOWN'            => '未知错误',
+        'ERROR_DEAD_LINK'          => '链接不可用',
+        'ERROR_HTTP_LINK'          => '链接不是http链接',
+        'ERROR_HTTP_CONTENTTYPE'   => '链接contentType不正确',
+        'INVALID_URL'              => '非法 URL',
+        'INVALID_IP'               => '非法 IP',
+    ];
 
     /**
      * 构造函数.
@@ -121,7 +121,7 @@ class Uploader
             $this->stateInfo = $this->getStateInfo('ERROR_CREATE_DIR');
 
             return;
-        } elseif (!is_writeable($dirname)) {
+        } elseif (!is_writable($dirname)) {
             $this->stateInfo = $this->getStateInfo('ERROR_DIR_NOT_WRITEABLE');
 
             return;
@@ -165,7 +165,7 @@ class Uploader
             $this->stateInfo = $this->getStateInfo('ERROR_CREATE_DIR');
 
             return;
-        } elseif (!is_writeable($dirname)) {
+        } elseif (!is_writable($dirname)) {
             $this->stateInfo = $this->getStateInfo('ERROR_DIR_NOT_WRITEABLE');
 
             return;
@@ -236,9 +236,9 @@ class Uploader
         //打开输出缓冲区并获取远程图片
         ob_start();
         $context = stream_context_create(
-            array('http' => array(
+            ['http' => [
                 'follow_location' => false, // don't follow redirects
-            ))
+            ]]
         );
         readfile($imgUrl, false, $context);
         $img = ob_get_contents();
@@ -265,7 +265,7 @@ class Uploader
             $this->stateInfo = $this->getStateInfo('ERROR_CREATE_DIR');
 
             return;
-        } elseif (!is_writeable($dirname)) {
+        } elseif (!is_writable($dirname)) {
             $this->stateInfo = $this->getStateInfo('ERROR_DIR_NOT_WRITEABLE');
 
             return;
@@ -391,13 +391,13 @@ class Uploader
      */
     public function getFileInfo()
     {
-        return array(
-            'state' => $this->stateInfo,
-            'url' => $this->fullName,
-            'title' => $this->fileName,
+        return [
+            'state'    => $this->stateInfo,
+            'url'      => $this->fullName,
+            'title'    => $this->fileName,
             'original' => $this->oriName,
-            'type' => $this->fileType,
-            'size' => $this->fileSize,
-        );
+            'type'     => $this->fileType,
+            'size'     => $this->fileSize,
+        ];
     }
 }

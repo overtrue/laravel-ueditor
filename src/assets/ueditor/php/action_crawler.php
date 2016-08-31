@@ -9,16 +9,16 @@ set_time_limit(0);
 include 'Uploader.class.php';
 
 /* 上传配置 */
-$config = array(
+$config = [
     'pathFormat' => $CONFIG['catcherPathFormat'],
-    'maxSize' => $CONFIG['catcherMaxSize'],
+    'maxSize'    => $CONFIG['catcherMaxSize'],
     'allowFiles' => $CONFIG['catcherAllowFiles'],
-    'oriName' => 'remote.png',
-);
+    'oriName'    => 'remote.png',
+];
 $fieldName = $CONFIG['catcherFieldName'];
 
 /* 抓取远程图片 */
-$list = array();
+$list = [];
 if (isset($_POST[$fieldName])) {
     $source = $_POST[$fieldName];
 } else {
@@ -27,18 +27,18 @@ if (isset($_POST[$fieldName])) {
 foreach ($source as $imgUrl) {
     $item = new Uploader($imgUrl, $config, 'remote');
     $info = $item->getFileInfo();
-    array_push($list, array(
-        'state' => $info['state'],
-        'url' => $info['url'],
-        'size' => $info['size'],
-        'title' => htmlspecialchars($info['title']),
+    array_push($list, [
+        'state'    => $info['state'],
+        'url'      => $info['url'],
+        'size'     => $info['size'],
+        'title'    => htmlspecialchars($info['title']),
         'original' => htmlspecialchars($info['original']),
-        'source' => htmlspecialchars($imgUrl),
-    ));
+        'source'   => htmlspecialchars($imgUrl),
+    ]);
 }
 
 /* 返回抓取数据 */
-return json_encode(array(
+return json_encode([
     'state' => count($list) ? 'SUCCESS' : 'ERROR',
-    'list' => $list,
-));
+    'list'  => $list,
+]);
