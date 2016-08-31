@@ -91,7 +91,7 @@ return [
 
         /* 列出指定目录下的文件 */
         'fileManagerActionName' => 'list-file', /* 执行文件管理的action名称 */
-        'fileManagerListPath' => '/upload/file/', /* 指定要列出文件的目录 */
+        'fileManagerListPath' => '/uploads/file/', /* 指定要列出文件的目录 */
         'fileManagerUrlPrefix' => '', /* 文件访问路径前缀 */
         'fileManagerListSize' => 20, /* 每次列出文件数量 */
         'fileManagerAllowFiles' => [
