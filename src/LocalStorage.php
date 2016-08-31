@@ -26,9 +26,9 @@ class LocalStorage implements StorageInterface
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
      * @param string                                              $filename
      *
-     * @return mixed
-     *
      * @throws \Overtrue\LaravelUEditor\StoreErrorException
+     *
+     * @return mixed
      */
     public function store(UploadedFile $file, $filename)
     {
@@ -73,7 +73,7 @@ class LocalStorage implements StorageInterface
 
         foreach ($filesIterator as $file) {
             $files[] = [
-                'url' => asset($path.'/'.$file->getRelativePathname()),
+                'url'   => asset($path.'/'.$file->getRelativePathname()),
                 'mtime' => $file->getMTime(),
             ];
         }

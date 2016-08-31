@@ -44,12 +44,12 @@ class StorageManager extends Manager
         $filename = $this->getFilename($file, $config);
 
         $response = [
-            'state' => 'SUCCESS',
-            'url' => $this->getUrl($filename),
-            'title' => $filename,
+            'state'    => 'SUCCESS',
+            'url'      => $this->getUrl($filename),
+            'title'    => $filename,
             'original' => $file->getClientOriginalName(),
-            'type' => $file->getExtension(),
-            'size' => $file->getSize(),
+            'type'     => $file->getExtension(),
+            'size'     => $file->getSize(),
         ];
 
         try {
@@ -77,7 +77,7 @@ class StorageManager extends Manager
 
         return [
             'state' => empty($files) ? 'no match file' : 'SUCCESS',
-            'list' => $files,
+            'list'  => $files,
             'start' => $start,
             'total' => count($files),
         ];
@@ -173,9 +173,9 @@ class StorageManager extends Manager
         foreach ($prefixes as $prefix) {
             if ($action == $upload[$prefix.'ActionName']) {
                 $config = [
-                    'action' => array_get($upload, $prefix.'ActionName'),
-                    'field_name' => array_get($upload, $prefix.'FieldName'),
-                    'max_size' => array_get($upload, $prefix.'MaxSize'),
+                    'action'      => array_get($upload, $prefix.'ActionName'),
+                    'field_name'  => array_get($upload, $prefix.'FieldName'),
+                    'max_size'    => array_get($upload, $prefix.'MaxSize'),
                     'allow_files' => array_get($upload, $prefix.'AllowFiles', []),
                     'path_format' => array_get($upload, $prefix.'PathFormat'),
                 ];
@@ -209,7 +209,7 @@ class StorageManager extends Manager
     {
         $time = time();
         $partials = explode('-', date('Y-y-m-d-H-i-s'));
-        $replacement = ['{yyyy}','{yy}', '{mm}', '{dd}', '{hh}', '{ii}', '{ss}'];
+        $replacement = ['{yyyy}', '{yy}', '{mm}', '{dd}', '{hh}', '{ii}', '{ss}'];
         $path = str_replace($replacement, $partials, $path);
         $path = str_replace('{time}', $time, $path);
 

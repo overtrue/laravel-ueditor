@@ -11,38 +11,38 @@ include 'Uploader.class.php';
 $base64 = 'upload';
 switch (htmlspecialchars($_GET['action'])) {
     case 'uploadimage':
-        $config = array(
+        $config = [
             'pathFormat' => $CONFIG['imagePathFormat'],
-            'maxSize' => $CONFIG['imageMaxSize'],
+            'maxSize'    => $CONFIG['imageMaxSize'],
             'allowFiles' => $CONFIG['imageAllowFiles'],
-        );
+        ];
         $fieldName = $CONFIG['imageFieldName'];
         break;
     case 'uploadscrawl':
-        $config = array(
+        $config = [
             'pathFormat' => $CONFIG['scrawlPathFormat'],
-            'maxSize' => $CONFIG['scrawlMaxSize'],
+            'maxSize'    => $CONFIG['scrawlMaxSize'],
             'allowFiles' => $CONFIG['scrawlAllowFiles'],
-            'oriName' => 'scrawl.png',
-        );
+            'oriName'    => 'scrawl.png',
+        ];
         $fieldName = $CONFIG['scrawlFieldName'];
         $base64 = 'base64';
         break;
     case 'uploadvideo':
-        $config = array(
+        $config = [
             'pathFormat' => $CONFIG['videoPathFormat'],
-            'maxSize' => $CONFIG['videoMaxSize'],
+            'maxSize'    => $CONFIG['videoMaxSize'],
             'allowFiles' => $CONFIG['videoAllowFiles'],
-        );
+        ];
         $fieldName = $CONFIG['videoFieldName'];
         break;
     case 'uploadfile':
     default:
-        $config = array(
+        $config = [
             'pathFormat' => $CONFIG['filePathFormat'],
-            'maxSize' => $CONFIG['fileMaxSize'],
+            'maxSize'    => $CONFIG['fileMaxSize'],
             'allowFiles' => $CONFIG['fileAllowFiles'],
-        );
+        ];
         $fieldName = $CONFIG['fileFieldName'];
         break;
 }

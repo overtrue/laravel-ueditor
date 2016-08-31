@@ -33,17 +33,17 @@ $end = $start + $size;
 $path = $_SERVER['DOCUMENT_ROOT'].(substr($path, 0, 1) == '/' ? '' : '/').$path;
 $files = getfiles($path, $allowFiles);
 if (!count($files)) {
-    return json_encode(array(
+    return json_encode([
         'state' => 'no match file',
-        'list' => array(),
+        'list'  => [],
         'start' => $start,
         'total' => count($files),
-    ));
+    ]);
 }
 
 /* 获取指定范围的列表 */
 $len = count($files);
-for ($i = min($end, $len) - 1, $list = array(); $i < $len && $i >= 0 && $i >= $start; --$i) {
+for ($i = min($end, $len) - 1, $list = []; $i < $len && $i >= 0 && $i >= $start; --$i) {
     $list[] = $files[$i];
 }
 //倒序
@@ -52,12 +52,12 @@ for ($i = min($end, $len) - 1, $list = array(); $i < $len && $i >= 0 && $i >= $s
 //}
 
 /* 返回数据 */
-$result = json_encode(array(
+$result = json_encode([
     'state' => 'SUCCESS',
-    'list' => $list,
+    'list'  => $list,
     'start' => $start,
     'total' => count($files),
-));
+]);
 
 return $result;
 
@@ -69,7 +69,7 @@ return $result;
  *
  * @return array
  */
-function getfiles($path, $allowFiles, &$files = array())
+function getfiles($path, $allowFiles, &$files = [])
 {
     if (!is_dir($path)) {
         return;
@@ -85,10 +85,10 @@ function getfiles($path, $allowFiles, &$files = array())
                 getfiles($path2, $allowFiles, $files);
             } else {
                 if (preg_match("/\.(".$allowFiles.')$/i', $file)) {
-                    $files[] = array(
-                        'url' => substr($path2, strlen($_SERVER['DOCUMENT_ROOT'])),
+                    $files[] = [
+                        'url'   => substr($path2, strlen($_SERVER['DOCUMENT_ROOT'])),
                         'mtime' => filemtime($path2),
-                    );
+                    ];
                 }
             }
         }
