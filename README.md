@@ -2,8 +2,12 @@
 ## 1.上传没加入中间件控制
 
 ## 2.php7报错
-        ErrorException in StorageManager.php line 217:
-        rand() expects parameter 2 to be integer, float given
+
+                ErrorException in StorageManager.php line 217:
+        
+                rand() expects parameter 2 to be integer, float given
+        
+        
 # 3.需开启phpinfo扩展
 
 
