@@ -214,9 +214,9 @@ class StorageManager extends Manager
         $path = str_replace('{time}', $time, $path);
 
         //替换随机字符串
-        $randNum = rand(1, 10000000000).rand(1, 10000000000);
         if (preg_match("/\{rand\:([\d]*)\}/i", $path, $matches)) {
-            $path = preg_replace("/\{rand\:[\d]*\}/i", substr($randNum, 0, $matches[1]), $path);
+            $length = min($matches[1], strlen(PHP_INT_MAX));
+            $path = preg_replace("/\{rand\:[\d]*\}/i", str_pad(mt_rand(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT), $path);
         }
 
         return $path;
