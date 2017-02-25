@@ -2,7 +2,7 @@
 
 return [
     // 存储引擎:filesystem.php 中 disks
-    'disk' => 'local',
+    'disk' => 'qiniu',
 
     'route' => [
         'name' => '/ueditor/server',

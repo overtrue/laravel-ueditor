@@ -90,7 +90,7 @@ class StorageManager extends Manager
      */
     public function getDefaultDriver()
     {
-        return 'local';
+        return $this->app['config']['ueditor.disk'];
     }
 
     /**
