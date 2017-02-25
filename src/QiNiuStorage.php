@@ -33,7 +33,11 @@ class QiNiuStorage implements StorageInterface
     public function store(UploadedFile $file, $filename)
     {
         $uploadManager = new UploadManager();
-        list($result, $error) = $uploadManager->putFile($this->getQiNiuAuth()->uploadToken(config('filesystems.disks.qiniu.bucket')), basename($filename), $file->getRealPath());
+        list($result, $error) = $uploadManager->putFile(
+            $this->getQiNiuAuth()->uploadToken(config('filesystems.disks.qiniu.bucket')),
+            basename($filename),
+            $file->getRealPath()
+        );
 
         if ($error !== null) {
             throw new StoreErrorException(trans('ERROR_UNKNOWN'));
@@ -65,7 +69,7 @@ class QiNiuStorage implements StorageInterface
             foreach (collect($iterms)->sortBy('putTime', SORT_REGULAR, true)->toArray() as $file ) {
                 $files[] = [
                     'url'   => $this->getQiNiuUrl($file['key']),
-                    'mtime' => $file['fsize'],
+                    'mtime' => $file['putTime'],
                 ];
             }
 
