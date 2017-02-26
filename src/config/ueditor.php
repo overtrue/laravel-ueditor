@@ -1,7 +1,7 @@
 <?php
 
 return [
-    // 存储引擎:filesystem.php 中 disks
+    // 存储引擎:filesystem.php 中 disks，local 或 qiniu
     'disk' => 'local',
 
     'route' => [

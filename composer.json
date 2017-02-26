@@ -13,7 +13,9 @@
             "Overtrue\\LaravelUEditor\\":"src/"
         }
     },
-    "require": {},
+    "require": {
+        "qiniu/php-sdk": "7.*"
+    },
     "require-dev": {
         "fabpot/php-cs-fixer": "^1.10"
     }
