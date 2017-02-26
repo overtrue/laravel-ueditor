@@ -1,8 +1,8 @@
 <?php
 
 return [
-    // 存储引擎:filesystem.php 中 disks
-    'disk' => 'qiniu',
+    // 存储引擎:filesystem.php 中 disks，local 或 qiniu
+    'disk' => 'local',
 
     'route' => [
         'name' => '/ueditor/server',

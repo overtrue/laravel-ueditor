@@ -33,6 +33,7 @@ class QiNiuStorage implements StorageInterface
     public function store(UploadedFile $file, $filename)
     {
         $uploadManager = new UploadManager();
+
         list($result, $error) = $uploadManager->putFile(
             $this->getQiNiuAuth()->uploadToken(config('filesystems.disks.qiniu.bucket')),
             basename($filename),
@@ -90,6 +91,8 @@ class QiNiuStorage implements StorageInterface
     }
 
     /**
+     * Get QiNiu auth object.
+     *
      * @return string
      */
     protected function getQiNiuAuth()
@@ -99,6 +102,8 @@ class QiNiuStorage implements StorageInterface
 
 
     /**
+     * Get QiNiu url base on file key.
+     *
      * @param $key
      * @return string
      */
@@ -108,6 +113,8 @@ class QiNiuStorage implements StorageInterface
     }
 
     /**
+     * Get QiNiu operation object.
+     *
      * @return Operation
      */
     protected function getQiNiuOperation()
