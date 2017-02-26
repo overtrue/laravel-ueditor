@@ -57,13 +57,13 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 如果你想使用七牛云储存，需要进行下面几个简单的操作：
 
- 1. 配置 `config/ueditor.php` 的 `disk` 为 `qiniu`:
+1.配置 `config/ueditor.php` 的 `disk` 为 `qiniu`:
 
 ```php
 'disk' => 'qiniu'
 ```
 
- 2. 在 `config/filesystems.php` 添加下面的配置：
+2.在 `config/filesystems.php` 添加下面的配置：
 
 ```php
 's3' => [
@@ -85,7 +85,7 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 ],
 ```
 
- 3. 在 `.env` 文件添加配置：
+3.在 `.env` 文件添加配置：
 
 ```php
 QINIU_BUCKET_NAME=
