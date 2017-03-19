@@ -4,6 +4,8 @@ UEditor integration for Laravel 5.
 
 # 使用
 
+> 视频教程：https://www.laravist.com/series/awesome-laravel-packages/episodes/7
+
 ## 安装
 
 ```shell
