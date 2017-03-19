@@ -45,6 +45,7 @@ class QiNiuStorage implements StorageInterface
     public function lists($path, $start, $size = 20, array $allowFiles = [])
     {
         $contents = Storage::disk('qiniu')->listContents($path,true);
+
         return collect($contents)->map(function ($file) {
             $files['url'] = $this->getUrl('/'.$file['path']);
             $files['mtime'] = $file['timestamp'];
