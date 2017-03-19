@@ -11,10 +11,7 @@
  */
 namespace Overtrue\LaravelUEditor;
 
-use Qiniu\Auth;
-use Qiniu\Processing\Operation;
-use Qiniu\Storage\BucketManager;
-use Qiniu\Storage\UploadManager;
+use Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -32,19 +29,7 @@ class QiNiuStorage implements StorageInterface
      */
     public function store(UploadedFile $file, $filename)
     {
-        $uploadManager = new UploadManager();
-
-        list($result, $error) = $uploadManager->putFile(
-            $this->getQiNiuAuth()->uploadToken(config('filesystems.disks.qiniu.bucket')),
-            basename($filename),
-            $file->getRealPath()
-        );
-
-        if ($error !== null) {
-            throw new StoreErrorException(trans('ERROR_UNKNOWN'));
-        } else {
-            // Anything todo here ?
-        }
+        Storage::disk('qiniu')->writeStream($filename, fopen($file->getRealPath(), 'r'));
     }
 
     /**
@@ -59,23 +44,12 @@ class QiNiuStorage implements StorageInterface
      */
     public function lists($path, $start, $size = 20, array $allowFiles = [])
     {
-        $bucketManager = new BucketManager($this->getQiNiuAuth());
-
-        list($iterms, $marker, $error) = $bucketManager->listFiles(config('filesystems.disks.qiniu.bucket'), '', '', $size);
-
-        if ($error !== null) {
-            throw new StoreErrorException(trans('ERROR_UNKNOWN'));
-        } else {
-            $files = [];
-            foreach (collect($iterms)->sortBy('putTime', SORT_REGULAR, true)->toArray() as $file ) {
-                $files[] = [
-                    'url'   => $this->getQiNiuUrl($file['key']),
-                    'mtime' => $file['putTime'],
-                ];
-            }
-
+        $contents = Storage::disk('qiniu')->listContents($path,true);
+        return collect($contents)->map(function ($file) {
+            $files['url'] = $this->getUrl('/'.$file['path']);
+            $files['mtime'] = $file['timestamp'];
             return $files;
-        }
+        });
     }
 
     /**
@@ -83,43 +57,10 @@ class QiNiuStorage implements StorageInterface
      *
      * @param $filename
      *
-     * @return mixed
+     * @return string
      */
     public function getUrl($filename)
     {
-        return $this->getQiNiuUrl(basename($filename));
+        return 'http://' . config('filesystems.disks.qiniu.domain') . $filename;
     }
-
-    /**
-     * Get QiNiu auth object.
-     *
-     * @return string
-     */
-    protected function getQiNiuAuth()
-    {
-        return new Auth(config('filesystems.disks.qiniu.key'), config('filesystems.disks.qiniu.secret'));
-    }
-
-
-    /**
-     * Get QiNiu url base on file key.
-     *
-     * @param $key
-     * @return string
-     */
-    protected function getQiNiuUrl($key)
-    {
-        return $this->getQiNiuOperation()->buildUrl($key, [], config('filesystems.disks.qiniu.protocol'));
-    }
-
-    /**
-     * Get QiNiu operation object.
-     *
-     * @return Operation
-     */
-    protected function getQiNiuOperation()
-    {
-        return new Operation(config('filesystems.disks.qiniu.domain'));
-    }
-
 }
