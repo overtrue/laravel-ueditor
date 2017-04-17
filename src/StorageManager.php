@@ -1,17 +1,16 @@
 <?php
-/**
- * StorageManager.php.
- *
- * This file is part of the laravel-ueditor.
- *
+
+/*
+ * This file is part of the overtrue/laravel-ueditor.
  * (c) overtrue <i@overtrue.me>
- *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Overtrue\LaravelUEditor;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Manager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -43,22 +42,21 @@ class StorageManager extends Manager
 
         $filename = $this->getFilename($file, $config);
 
-        $response = [
-            'state'    => 'SUCCESS',
-            'url'      => $this->getUrl($filename),
-            'title'    => $filename,
-            'original' => $file->getClientOriginalName(),
-            'type'     => $file->getExtension(),
-            'size'     => $file->getSize(),
-        ];
-
         try {
             $this->store($file, $filename);
+            $response = [
+                'state' => 'SUCCESS',
+                'url' => $this->getUrl($filename),
+                'title' => $filename,
+                'original' => $file->getClientOriginalName(),
+                'type' => $file->getExtension(),
+                'size' => $file->getSize(),
+            ];
+
+            return response()->json($response);
         } catch (StoreErrorException $e) {
             return $this->error($e->getMessage());
         }
-
-        return response()->json($response);
     }
 
     /**
@@ -73,14 +71,48 @@ class StorageManager extends Manager
      */
     public function listFiles($path, $start, $size = 20, array $allowFiles = [])
     {
-        $files = $this->lists($path, $start, $size, $allowFiles);
+        $files = $this->paginateFiles($this->listContents($path, true), $start, $size);
 
         return [
-            'state' => empty($files) ? 'no match file' : 'SUCCESS',
-            'list'  => $files,
+            'state' => empty($files) ? 'EMPTY' : 'SUCCESS',
+            'list' => $files,
             'start' => $start,
             'total' => count($files),
         ];
+    }
+
+    /**
+     * Split results.
+     *
+     * @param array $files
+     * @param int   $start
+     * @param int   $size
+     *
+     * @return array
+     */
+    protected function paginateFiles(array $files, $start = 0, $size = 50)
+    {
+        $disk = Storage::disk($this->app['config']['ueditor.disk']);
+
+        return collect($files)->skip($start)->take($size)->map(function ($file) use ($disk) {
+            return [
+                'url' => $disk->url($file['path']),
+                'mtime' => $file['timestamp'],
+            ];
+        })->all();
+    }
+
+    /**
+     * Store file.
+     *
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * @param string                                              $filename
+     *
+     * @return mixed
+     */
+    public function store(UploadedFile $file, $filename)
+    {
+        Storage::disk('qiniu')->putFileAs('', $filename, $file);
     }
 
     /**
@@ -90,27 +122,7 @@ class StorageManager extends Manager
      */
     public function getDefaultDriver()
     {
-        return $this->app['config']['ueditor.disk'];
-    }
-
-    /**
-     * Get the default driver name.
-     *
-     * @return string
-     */
-    public function createLocalDriver()
-    {
-        return new LocalStorage($this);
-    }
-
-    /**
-     * Make qiniu storage.
-     *
-     * @return \Overtrue\LaravelUEditor\QiNiuStorage
-     */
-    public function createQiniuDriver()
-    {
-        return new QiNiuStorage($this);
+        return Storage::disk($this->app['config']['ueditor.disk']);
     }
 
     /**
@@ -131,7 +143,7 @@ class StorageManager extends Manager
             $error = 'upload.ERROR_SIZE_EXCEED';
         } elseif (!empty($config['allow_files']) &&
             !in_array('.'.$file->guessExtension(), $config['allow_files'])) {
-            $error = 'ERROR_TYPE_NOT_ALLOWED';
+            $error = 'upload.ERROR_TYPE_NOT_ALLOWED';
         }
 
         return $error;
@@ -147,7 +159,7 @@ class StorageManager extends Manager
      */
     protected function getFilename(UploadedFile $file, array $config)
     {
-        $ext = '.'.($file->getClientOriginalExtension() ?: $file->guessClientExtension());
+        $ext = '.'.($file->guessClientExtension() ?: $file->getClientOriginalExtension());
 
         return str_finish($this->formatPath($config['path_format']), '/').md5($file->getFilename()).$ext;
     }
@@ -173,9 +185,9 @@ class StorageManager extends Manager
         foreach ($prefixes as $prefix) {
             if ($action == $upload[$prefix.'ActionName']) {
                 $config = [
-                    'action'      => array_get($upload, $prefix.'ActionName'),
-                    'field_name'  => array_get($upload, $prefix.'FieldName'),
-                    'max_size'    => array_get($upload, $prefix.'MaxSize'),
+                    'action' => array_get($upload, $prefix.'ActionName'),
+                    'field_name' => array_get($upload, $prefix.'FieldName'),
+                    'max_size' => array_get($upload, $prefix.'MaxSize'),
                     'allow_files' => array_get($upload, $prefix.'AllowFiles', []),
                     'path_format' => array_get($upload, $prefix.'PathFormat'),
                 ];

@@ -1,16 +1,26 @@
 <?php
-/**
- * PHP-CS-fixer configuration.
- */
+$header = <<<EOF
+This file is part of the overtrue/laravel-ueditor.
+(c) overtrue <i@overtrue.me>
+This source file is subject to the MIT license that is bundled
+with this source code in the file LICENSE.
+EOF;
 
-$finder = Symfony\CS\Finder\DefaultFinder::create()
-    ->in(__DIR__ . '/src/')
-;
-
-return Symfony\CS\Config\Config::create()
-    ->fixers(array (
-  0 => 'symfony',
-))
-    ->finder($finder)
-    ->setUsingCache(true)
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules(array(
+        '@Symfony' => true,
+        'header_comment' => array('header' => $header),
+        'array_syntax' => array('syntax' => 'short'),
+        'ordered_imports' => true,
+        'no_useless_else' => true,
+        'no_useless_return' => true,
+        'php_unit_construct' => true,
+        'php_unit_strict' => true,
+    ))
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->exclude('vendor')
+            ->in(__DIR__)
+    )
 ;
