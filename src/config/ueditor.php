@@ -12,6 +12,9 @@ return [
     'disk' => 'public',
     'route' => [
         'name' => '/ueditor/server',
+        'options' => [
+            // middleware => 'auth',
+        ],
     ],
 
     // 上传 配置
