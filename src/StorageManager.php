@@ -57,21 +57,18 @@ class StorageManager
 
         $filename = $this->getFilename($file, $config);
 
-        try {
-            $this->store($file, $filename);
-            $response = [
-                'state' => 'SUCCESS',
-                'url' => $this->disk->url($filename),
-                'title' => $filename,
-                'original' => $file->getClientOriginalName(),
-                'type' => $file->getExtension(),
-                'size' => $file->getSize(),
-            ];
+        $this->store($file, $filename);
 
-            return response()->json($response);
-        } catch (StoreErrorException $e) {
-            return $this->error($e->getMessage());
-        }
+        $response = [
+            'state' => 'SUCCESS',
+            'url' => $this->disk->url($filename),
+            'title' => $filename,
+            'original' => $file->getClientOriginalName(),
+            'type' => $file->getExtension(),
+            'size' => $file->getSize(),
+        ];
+
+        return response()->json($response);
     }
 
     /**
@@ -84,7 +81,7 @@ class StorageManager
      *
      * @return Response
      */
-    protected function listFiles($path, $start, $size = 20, array $allowFiles = [])
+    public function listFiles($path, $start, $size = 20, array $allowFiles = [])
     {
         $files = $this->paginateFiles($this->disk->listContents($path, true), $start, $size);
 
@@ -107,7 +104,7 @@ class StorageManager
      */
     protected function paginateFiles(array $files, $start = 0, $size = 50)
     {
-        return collect($files)->skip($start)->take($size)->map(function ($file) {
+        return collect($files)->where('type', 'file')->splice($start)->take($size)->map(function ($file) {
             return [
                 'url' => $this->disk->url($file['path']),
                 'mtime' => $file['timestamp'],
