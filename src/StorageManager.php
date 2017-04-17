@@ -11,14 +11,29 @@ namespace Overtrue\LaravelUEditor;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Manager;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class StorageManager.
  */
-class StorageManager extends Manager
+class StorageManager
 {
+    /**
+     * @var \Illuminate\Contracts\Filesystem\Filesystem
+     */
+    protected $disk;
+
+    /**
+     * Constructor.
+     *
+     * @param \Illuminate\Contracts\Filesystem\Filesystem $disk
+     */
+    public function __construct(Filesystem $disk)
+    {
+        $this->disk = $disk;
+    }
+
     /**
      * Upload a file.
      *
@@ -46,7 +61,7 @@ class StorageManager extends Manager
             $this->store($file, $filename);
             $response = [
                 'state' => 'SUCCESS',
-                'url' => $this->getUrl($filename),
+                'url' => $this->disk->url($filename),
                 'title' => $filename,
                 'original' => $file->getClientOriginalName(),
                 'type' => $file->getExtension(),
@@ -69,9 +84,9 @@ class StorageManager extends Manager
      *
      * @return Response
      */
-    public function listFiles($path, $start, $size = 20, array $allowFiles = [])
+    protected function listFiles($path, $start, $size = 20, array $allowFiles = [])
     {
-        $files = $this->paginateFiles($this->listContents($path, true), $start, $size);
+        $files = $this->paginateFiles($this->disk->listContents($path, true), $start, $size);
 
         return [
             'state' => empty($files) ? 'EMPTY' : 'SUCCESS',
@@ -92,11 +107,9 @@ class StorageManager extends Manager
      */
     protected function paginateFiles(array $files, $start = 0, $size = 50)
     {
-        $disk = Storage::disk($this->app['config']['ueditor.disk']);
-
-        return collect($files)->skip($start)->take($size)->map(function ($file) use ($disk) {
+        return collect($files)->skip($start)->take($size)->map(function ($file) {
             return [
-                'url' => $disk->url($file['path']),
+                'url' => $this->disk->url($file['path']),
                 'mtime' => $file['timestamp'],
             ];
         })->all();
@@ -110,19 +123,9 @@ class StorageManager extends Manager
      *
      * @return mixed
      */
-    public function store(UploadedFile $file, $filename)
+    protected function store(UploadedFile $file, $filename)
     {
-        Storage::disk('qiniu')->putFileAs('', $filename, $file);
-    }
-
-    /**
-     * Return default driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver()
-    {
-        return Storage::disk($this->app['config']['ueditor.disk']);
+        return $this->disk->putFileAs('', $file, $filename);
     }
 
     /**
@@ -133,7 +136,7 @@ class StorageManager extends Manager
      *
      * @return bool|string
      */
-    public function fileHasError(UploadedFile $file, array $config)
+    protected function fileHasError(UploadedFile $file, array $config)
     {
         $error = false;
 
@@ -171,7 +174,7 @@ class StorageManager extends Manager
      *
      * @return array
      */
-    public function getUploadConfig($action)
+    protected function getUploadConfig($action)
     {
         $upload = config('ueditor.upload');
 
@@ -217,7 +220,7 @@ class StorageManager extends Manager
      *
      * @return mixed
      */
-    public function formatPath($path)
+    protected function formatPath($path)
     {
         $time = time();
         $partials = explode('-', date('Y-y-m-d-H-i-s'));

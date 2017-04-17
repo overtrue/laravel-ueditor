@@ -51,15 +51,15 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 # 说明
 
-在 `config/ueditor.php` 配置 `disk` 为 `'local'` 情况下，上传路径在：`public/uploads/` 下，确认该目录存在并可写。
-
-如果要修改上传路径，请在 `config/ueditor.php` 里各种类型的上传路径，但是都在 public 下。
+1. 在 `config/ueditor.php` 配置 `disk` 为 `'public'` 情况下，上传路径在：`public/uploads/` 下，确认该目录存在并可写。
+2. 如果要修改上传路径，请在 `config/ueditor.php` 里各种类型的上传路径，但是都在 public 下。
+3. 请在 `.env` 中正确配置 `APP_URL` 为你的当前域名，否则可能上传成功了，但是无法正确显示。
 
 # 七牛支持
 
 如果你想使用七牛云储存，需要进行下面几个简单的操作：
 
-1.安装和配置 [laravel-filesystem-qiniu](https://github.com/overtrue/laravel-filesystem-qiniu) 
+1.安装和配置 [laravel-filesystem-qiniu](https://github.com/overtrue/laravel-filesystem-qiniu)
 
 2.配置 `config/ueditor.php` 的 `disk` 为 `qiniu`:
 

@@ -8,9 +8,8 @@
  */
 
 return [
-    // 存储引擎:filesystem.php 中 disks，local 或 qiniu
-    'disk' => 'local',
-
+    // 存储引擎: config/filesystem.php 中 disks， public 或 qiniu
+    'disk' => 'public',
     'route' => [
         'name' => '/ueditor/server',
     ],
