@@ -69,8 +69,7 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 3.剩下时间打局 LOL，已经完事了。
 
-> 七牛的 `access_key` 和 `secret_Key` 可以在这里找到：https://portal.qiniu.com/user/key ,在创建 `bucket`
-（空间）的时候，推荐大家都使用公开的空间。
+> 七牛的 `access_key` 和 `secret_key` 可以在这里找到：https://portal.qiniu.com/user/key ,在创建 `bucket` （空间）的时候，推荐大家都使用公开的空间。
 
 # License
 
