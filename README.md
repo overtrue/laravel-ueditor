@@ -23,7 +23,7 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 2. 发布配置文件与资源
 
     ```php
-    $ php artisan vendor:publish --provider="Overtrue\LaravelUEditor\UEditorServiceProvider"
+    $ php artisan vendor:publish --provider='Overtrue\LaravelUEditor\UEditorServiceProvider'
     ```
 
 3. 模板引入编辑器
