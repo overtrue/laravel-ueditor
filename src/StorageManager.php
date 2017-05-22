@@ -108,7 +108,7 @@ class StorageManager
     {
         return collect($files)->where('type', 'file')->splice($start)->take($size)->map(function ($file) {
             return [
-                'url' => $this->disk->url($file['path']),
+                'url' => $this->getUrl($file['path']),
                 'mtime' => $file['timestamp'],
             ];
         })->all();
