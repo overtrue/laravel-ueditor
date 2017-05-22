@@ -9,9 +9,9 @@
 
 namespace Overtrue\LaravelUEditor;
 
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -19,6 +19,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class StorageManager
 {
+    use UrlResolverTrait;
+
     /**
      * @var \Illuminate\Contracts\Filesystem\Filesystem
      */
@@ -61,7 +63,7 @@ class StorageManager
 
         $response = [
             'state' => 'SUCCESS',
-            'url' => $this->disk->url($filename),
+            'url' => $this->getUrl($filename),
             'title' => $filename,
             'original' => $file->getClientOriginalName(),
             'type' => $file->getExtension(),
@@ -226,9 +228,9 @@ class StorageManager
         $path = str_replace('{time}', $time, $path);
 
         //替换随机字符串
-        if (preg_match("/\{rand\:([\d]*)\}/i", $path, $matches)) {
+        if (preg_match('/\{rand\:([\d]*)\}/i', $path, $matches)) {
             $length = min($matches[1], strlen(PHP_INT_MAX));
-            $path = preg_replace("/\{rand\:[\d]*\}/i", str_pad(mt_rand(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT), $path);
+            $path = preg_replace('/\{rand\:[\d]*\}/i', str_pad(mt_rand(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT), $path);
         }
 
         return $path;
