@@ -87,7 +87,7 @@ trait UrlResolverTrait
             return rtrim($config->get('url'), '/').'/'.ltrim($path, '/');
         }
 
-        $path = '/storage/'.$path;
+        $path = '/storage/'.ltrim($path, '/');
 
         // If the path contains "storage/public", it probably means the developer is using
         // the default disk to generate the path instead of the "public" disk like they
