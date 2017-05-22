@@ -122,7 +122,7 @@ class StorageManager
      */
     protected function store(UploadedFile $file, $filename)
     {
-        return $this->disk->putFileAs('', $file, $filename);
+        return $this->disk->put($filename, fopen($file->getRealPath(), 'r+'));
     }
 
     /**
