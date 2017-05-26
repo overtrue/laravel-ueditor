@@ -224,10 +224,9 @@ class StorageManager
      */
     protected function formatPath($path, $filename)
     {
-        $time = time();
-        $partials = explode('-', date('Y-y-m-d-H-i-s'));
-        $replacement = ['{yyyy}', '{yy}', '{mm}', '{dd}', '{hh}', '{ii}', '{ss}', '{filename}', '{time}'];
-        $path = str_replace($replacement, array_merge($partials, [$filename, $time]), $path);
+        $replacement = array_merge(explode('-', date('Y-y-m-d-H-i-s')), [$filename, time()]);
+        $placeholders = ['{yyyy}', '{yy}', '{mm}', '{dd}', '{hh}', '{ii}', '{ss}', '{filename}', '{time}'];
+        $path = str_replace($placeholders, $replacement, $path);
 
         //替换随机字符串
         if (preg_match('/\{rand\:([\d]*)\}/i', $path, $matches)) {
