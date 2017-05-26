@@ -165,7 +165,7 @@ class StorageManager
 
         $filename = config('ueditor.hash_filename') ? md5($file->getFilename()).$ext : $file->getClientOriginalName();
 
-        return str_finish($this->formatPath($config['path_format']), '/').$filename;
+        return $this->formatPath($config['path_format'], $filename);
     }
 
     /**
@@ -218,21 +218,25 @@ class StorageManager
      * Format the storage path.
      *
      * @param string $path
+     * @param string $filename
      *
      * @return mixed
      */
-    protected function formatPath($path)
+    protected function formatPath($path, $filename)
     {
         $time = time();
         $partials = explode('-', date('Y-y-m-d-H-i-s'));
-        $replacement = ['{yyyy}', '{yy}', '{mm}', '{dd}', '{hh}', '{ii}', '{ss}'];
-        $path = str_replace($replacement, $partials, $path);
-        $path = str_replace('{time}', $time, $path);
+        $replacement = ['{yyyy}', '{yy}', '{mm}', '{dd}', '{hh}', '{ii}', '{ss}', '{filename}', '{time}'];
+        $path = str_replace($replacement, array_merge($partials, [$filename, $time]), $path);
 
         //替换随机字符串
         if (preg_match('/\{rand\:([\d]*)\}/i', $path, $matches)) {
             $length = min($matches[1], strlen(PHP_INT_MAX));
             $path = preg_replace('/\{rand\:[\d]*\}/i', str_pad(mt_rand(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT), $path);
+        }
+
+        if (!str_contains($path, $filename)) {
+            $path = str_finish($path, '/').$filename;
         }
 
         return $path;
