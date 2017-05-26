@@ -161,9 +161,11 @@ class StorageManager
      */
     protected function getFilename(UploadedFile $file, array $config)
     {
-        $ext = '.'.($file->guessClientExtension() ?: $file->getClientOriginalExtension());
+        $ext = '.'.$file->getClientOriginalExtension();
 
-        return str_finish($this->formatPath($config['path_format']), '/').md5($file->getFilename()).$ext;
+        $filename = config('ueditor.hash_filename') ? md5($file->getFilename()).$ext : $file->getClientOriginalName();
+
+        return str_finish($this->formatPath($config['path_format']), '/').$filename;
     }
 
     /**
