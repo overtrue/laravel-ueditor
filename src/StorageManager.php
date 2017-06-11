@@ -85,13 +85,14 @@ class StorageManager
      */
     public function listFiles($path, $start, $size = 20, array $allowFiles = [])
     {
-        $files = $this->paginateFiles($this->disk->listContents($path, true), $start, $size);
+        $allFiles = $this->disk->listContents($path, true);
+        $files = $this->paginateFiles($allFiles, $start, $size);
 
         return [
             'state' => empty($files) ? 'EMPTY' : 'SUCCESS',
             'list' => $files,
             'start' => $start,
-            'total' => count($files),
+            'total' => count($allFiles),
         ];
     }
 
