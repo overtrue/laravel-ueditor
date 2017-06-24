@@ -61,7 +61,7 @@ class StorageManager
 
         $filename = $this->getFilename($file, $config);
 
-        $modifiedFilename = event(new Uploading($file, $filename, $config));
+        $modifiedFilename = event(new Uploading($file, $filename, $config), [], true);
 
         $this->store($file, !is_null($modifiedFilename) ? $modifiedFilename : $filename);
 
