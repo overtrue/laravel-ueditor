@@ -4,3 +4,4 @@
 sftp-config.json
 .subsplit
 .php_cs.cache
+composer.lock

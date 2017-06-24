@@ -76,6 +76,45 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 > 七牛的 `access_key` 和 `secret_key` 可以在这里找到：https://portal.qiniu.com/user/key ,在创建 `bucket` （空间）的时候，推荐大家都使用公开的空间。
 
+# 事件
+
+你肯定有一些朋友肯定会有一些比较特殊的场景，那么你可以使用本插件提供的事件来支持：
+
+> 请按照 Laravel 事件的文档来使用：
+> https://laravel.com/docs/5.4/events#registering-events-and-listeners
+
+## 上传中事件
+
+> Overtrue\LaravelUEditor\Events\Uploading
+
+在保存文件之前，你可以拿到一些信息：
+
+- `$event->file` 这是请求的已经上传的文件对象，`Symfony\Component\HttpFoundation\File\UploadedFile` 实例。
+- `$event->filename` 这是即将存储时用的新文件名
+- `$event->config` 上传配置，数组。
+
+你可以在本事件监听器返回值，返回值将替换 `$filename` 作为存储文件名。
+
+## 上传完成事件
+
+> Overtrue\LaravelUEditor\Events\Uploaded
+
+它有两个属性：
+
+- `$event->file` 与 Uploading 一样，上传的文件
+- `$event->result` 上传结构，数组，包含以下信息：
+
+   ```php
+   'state' => 'SUCCESS',
+   'url' => 'http://xxxxxx.qiniucdn.com/xxx/xxx.jpg',
+   'title' => '文件名.jpg',
+   'original' => '上传时的源文件名.jpg',
+   'type' => 'jpg',
+   'size' => 17283,
+   ```
+
+你可以监听此事件用于一些后续处理任务，比如记录到数据库。
+
 # License
 
 MIT

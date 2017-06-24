@@ -12,6 +12,8 @@ namespace Overtrue\LaravelUEditor;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Overtrue\LaravelUEditor\Events\Uploaded;
+use Overtrue\LaravelUEditor\Events\Uploading;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -59,7 +61,9 @@ class StorageManager
 
         $filename = $this->getFilename($file, $config);
 
-        $this->store($file, $filename);
+        $modifiedFilename = event(new Uploading($file, $filename, $config));
+
+        $this->store($file, !is_null($modifiedFilename) ? $modifiedFilename : $filename);
 
         $response = [
             'state' => 'SUCCESS',
@@ -69,6 +73,8 @@ class StorageManager
             'type' => $file->getExtension(),
             'size' => $file->getSize(),
         ];
+
+        event(new Uploaded($file, $response));
 
         return response()->json($response);
     }
