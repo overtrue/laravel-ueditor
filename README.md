@@ -60,7 +60,7 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 1. 如果要修改上传路径，请在 `config/ueditor.php` 里各种类型的上传路径，但是都在 public 下。
 1. 请在 `.env` 中正确配置 `APP_URL` 为你的当前域名，否则可能上传成功了，但是无法正确显示。
 
-# 七牛支持
+## 七牛支持
 
 如果你想使用七牛云储存，需要进行下面几个简单的操作：
 
@@ -76,14 +76,14 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 > 七牛的 `access_key` 和 `secret_key` 可以在这里找到：https://portal.qiniu.com/user/key ,在创建 `bucket` （空间）的时候，推荐大家都使用公开的空间。
 
-# 事件
+## 事件
 
 你肯定有一些朋友肯定会有一些比较特殊的场景，那么你可以使用本插件提供的事件来支持：
 
 > 请按照 Laravel 事件的文档来使用：
 > https://laravel.com/docs/5.4/events#registering-events-and-listeners
 
-## 上传中事件
+### 上传中事件
 
 > Overtrue\LaravelUEditor\Events\Uploading
 
@@ -95,7 +95,7 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 你可以在本事件监听器返回值，返回值将替换 `$filename` 作为存储文件名。
 
-## 上传完成事件
+### 上传完成事件
 
 > Overtrue\LaravelUEditor\Events\Uploaded
 
