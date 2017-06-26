@@ -26,17 +26,17 @@ class Uploading
     /**
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      */
-    protected $file;
+    public $file;
 
     /**
      * @var string
      */
-    protected $filename;
+    public $filename;
 
     /**
      * @var array
      */
-    protected $config;
+    public $config;
 
     /**
      * Uploading constructor.
