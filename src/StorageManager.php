@@ -61,8 +61,10 @@ class StorageManager
 
         $filename = $this->getFilename($file, $config);
 
-        $modifiedFilename = event(new Uploading($file, $filename, $config), [], true);
-        $filename = !is_null($modifiedFilename) ? $modifiedFilename : $filename;
+        if ($this->eventSupport()) {
+            $modifiedFilename = event(new Uploading($file, $filename, $config), [], true);
+            $filename = !is_null($modifiedFilename) ? $modifiedFilename : $filename;
+        }
 
         $this->store($file, $filename);
 
@@ -75,9 +77,19 @@ class StorageManager
             'size' => $file->getSize(),
         ];
 
-        event(new Uploaded($file, $response));
+        if ($this->eventSupport()) {
+            event(new Uploaded($file, $response));
+        }
 
         return response()->json($response);
+    }
+
+    /**
+     * @return bool
+     */
+    public function eventSupport()
+    {
+        return class_exists('Illuminate\Foundation\Events\Dispatchable');
     }
 
     /**
