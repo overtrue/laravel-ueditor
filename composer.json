@@ -18,5 +18,12 @@
     },
     "require-dev": {
         "fabpot/php-cs-fixer": "^1.10"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Overtrue\\LaravelUEditor\\UEditorServiceProvider"
+            ]
+        }
     }
 }
