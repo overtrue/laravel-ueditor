@@ -91,7 +91,7 @@ class StorageManager
      */
     public function eventSupport()
     {
-        return class_exists('Illuminate\Foundation\Events\Dispatchable');
+        return trait_exists('Illuminate\Foundation\Events\Dispatchable');
     }
 
     /**
