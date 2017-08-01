@@ -51,6 +51,7 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 # 说明
 
+1. 5.4+ 请不要忘记 `php artisan storage:link`
 1. 如果你使用的是 laravel 5.3 以下版本，请先创建软链接：
     ```shell
     # 请在项目根目录执行以下命令
