@@ -166,7 +166,7 @@ class StorageManager
         } elseif ($file->getSize() > $config['max_size']) {
             $error = 'upload.ERROR_SIZE_EXCEED';
         } elseif (!empty($config['allow_files']) &&
-            !in_array('.'.$file->guessExtension(), $config['allow_files'])) {
+            !in_array('.'.$file->getClientOriginalExtension(), $config['allow_files'])) {
             $error = 'upload.ERROR_TYPE_NOT_ALLOWED';
         }
 

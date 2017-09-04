@@ -53,6 +53,7 @@ trait UrlResolverTrait
         } elseif ($adapter instanceof LocalAdapter) {
             return $this->getLocalUrl($path);
         }
+
         throw new RuntimeException('This driver does not support retrieving URLs.');
     }
 
