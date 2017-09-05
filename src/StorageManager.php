@@ -217,6 +217,7 @@ class StorageManager
                     'allow_files' => array_get($upload, $prefix.'AllowFiles', []),
                     'path_format' => array_get($upload, $prefix.'PathFormat'),
                 ];
+
                 break;
             }
         }
