@@ -43,9 +43,7 @@ class UEditorServiceProvider extends ServiceProvider
             __DIR__.'/translations' => base_path('resources/lang/vendor/ueditor'),
         ], 'resources');
 
-        if (!app()->runningInConsole()) {
-            $this->registerRoute($router);
-        }
+        $this->registerRoute($router);
     }
 
     /**
