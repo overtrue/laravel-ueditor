@@ -66,7 +66,7 @@ class UEditorServiceProvider extends ServiceProvider
     {
         if (!$this->app->routesAreCached()) {
             $router->group(array_merge(['namespace' => __NAMESPACE__], config('ueditor.route.options', [])), function ($router) {
-                $router->any(config('ueditor.route.name', '/ueditor/server'), 'UEditorController@serve');
+                $router->any(config('ueditor.route.url', '/ueditor/server'), 'UEditorController@serve')->name(config('ueditor.route.name', 'ueditor.server'));
             });
         }
     }
