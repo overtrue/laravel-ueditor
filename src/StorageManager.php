@@ -86,6 +86,7 @@ class StorageManager
 
         return response()->json($response);
     }
+
     /**
      * Fetch a file.
      *
@@ -127,12 +128,13 @@ class StorageManager
 
         return response()->json($response);
     }
+
     /**
      * Download a file.
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return file
+     * @return Array
      */
     private function download($url, $config)
     {
@@ -144,7 +146,7 @@ class StorageManager
         if (strpos($imgUrl, 'http') !== 0) {
             return $this->error('ERROR_HTTP_LINK');
         }
-        
+
         $context = stream_context_create(
             array('http' => array(
                 'follow_location' => false, // don't follow redirects
@@ -168,7 +170,6 @@ class StorageManager
             'file' => $img,
             'filename' => $filename,
         ];
-
     }
 
     /**

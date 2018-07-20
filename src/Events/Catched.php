@@ -37,7 +37,6 @@ class Catched
      */
     public function __construct(array $result)
     {
-        // $this->file = $file;
         $this->result = $result;
     }
 }
