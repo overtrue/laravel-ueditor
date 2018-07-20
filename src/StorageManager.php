@@ -116,7 +116,6 @@ class StorageManager
                     event(new Catched($img));
                 }
             }
-            $img['filename'] = $filename;
             unset($img['file']);
             array_push($list, $img);
         }
@@ -134,42 +133,46 @@ class StorageManager
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return Array
+     * @return Array $info
      */
     private function download($url, $config)
     {
-        $imgUrl = htmlspecialchars($url);
-        $imgUrl = str_replace('&amp;', '&', $imgUrl);
-        $pathRes = parse_url($imgUrl);
-        $queryString = isset($pathRes['query']) ? $pathRes['query'] : '';
-        $imgUrl = str_replace('?' . $queryString, '', $imgUrl);
-        if (strpos($imgUrl, 'http') !== 0) {
+        if (strpos($url, 'http') !== 0) {
             return $this->error('ERROR_HTTP_LINK');
         }
+        $pathRes = parse_url($url);
+        $img = new \SplFileInfo($pathRes['path']);
+        $original = $img->getFilename();
+        $ext = $img->getExtension();
+        $title = config('ueditor.hash_filename') ? md5($original) . $ext : $original;
+        $filename = $this->formatPath($config['path_format'], $title);
+        $info = [
+            'state' => 'SUCCESS',
+            'url' => $this->getUrl($filename),
+            'title' => $title,
+            'original' => $original,
+            'source' => $url,
+            'size' => 0,
+            'file' => '',
+            'filename' => $filename,
+        ];
 
         $context = stream_context_create(
             array('http' => array(
                 'follow_location' => false, // don't follow redirects
             ))
         );
-        $file = fopen($imgUrl . '?' . $queryString, 'r', false, $context);
-        $img = stream_get_contents($file);
+        $file = fopen($url, 'r', false, $context);
+        if ($file === false) {
+            $info['state'] = 'ERROR';
+            return $info;
+        }
+        $content = stream_get_contents($file);
         fclose($file);
-        preg_match('/[\/]([^\/]*)[\.]?[^\.\/]*$/', $imgUrl, $m);
-        $original = $m ? $m[1] : '';
-        $ext = strtolower(strrchr($original, '.'));
-        $title = config('ueditor.hash_filename') ? md5($original) . $ext : $original;
-        $filename = $this->formatPath($config['path_format'], $title);
-        return [
-            'state' => 'SUCCESS',
-            'url' => $this->getUrl($filename),
-            'title' => $title,
-            'original' => $original,
-            'source' => $url,
-            'size' => strlen($img),
-            'file' => $img,
-            'filename' => $filename,
-        ];
+        
+        $info['file'] = $content;
+        $info['siez'] = strlen($content);
+        return $info;
     }
 
     /**
