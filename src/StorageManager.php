@@ -144,7 +144,7 @@ class StorageManager
         $img = new \SplFileInfo($pathRes['path']);
         $original = $img->getFilename();
         $ext = $img->getExtension();
-        $title = config('ueditor.hash_filename') ? md5($original) . $ext : $original;
+        $title = config('ueditor.hash_filename') ? md5($original) . '.' . $ext : $original;
         $filename = $this->formatPath($config['path_format'], $title);
         $info = [
             'state' => 'SUCCESS',
