@@ -102,7 +102,7 @@ class StorageManager
             return $this->error('UPLOAD_ERR_NO_FILE');
         }
         $urls = array_unique($urls);
-        
+
         $list = array();
         foreach ($urls as $key => $url) {
             $img = $this->download($url, $config);
@@ -144,7 +144,7 @@ class StorageManager
         $img = new \SplFileInfo($pathRes['path']);
         $original = $img->getFilename();
         $ext = $img->getExtension();
-        $title = config('ueditor.hash_filename') ? md5($original) . '.' . $ext : $original;
+        $title = md5($url) . '.' . $ext;
         $filename = $this->formatPath($config['path_format'], $title);
         $info = [
             'state' => 'SUCCESS',
@@ -169,7 +169,7 @@ class StorageManager
         }
         $content = stream_get_contents($file);
         fclose($file);
-        
+
         $info['file'] = $content;
         $info['siez'] = strlen($content);
         return $info;
